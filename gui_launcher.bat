@@ -1,17 +1,10 @@
 @echo off
-title DAVID CYBER INTELLIGENCE SYSTEM
-echo.
-echo  ============================================
-echo   DAVID CYBER INTELLIGENCE SYSTEM v2.0
-echo   Devil Pvt Ltd ^& Nexuzy Tech Pvt Ltd
-echo  ============================================
-echo.
-echo  Starting Tkinter GUI...
-echo.
-python gui_app.py
-if errorlevel 1 (
-    echo.
-    echo  ERROR: Failed to start. Make sure Python is installed.
-    echo  Run: pip install -r requirements.txt
+chcp 65001 >nul
+title DAVID CIS
+cd /d "%~dp0"
+pythonw launcher.py
+if %errorlevel% neq 0 (
+    echo [!] pythonw failed, trying python...
+    python launcher.py
     pause
 )

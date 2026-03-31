@@ -1,8 +1,6 @@
-#!/bin/bash
-echo "============================================"
-echo " DAVID CYBER INTELLIGENCE SYSTEM v2.0"
-echo " Devil Pvt Ltd & Nexuzy Tech Pvt Ltd"
-echo "============================================"
-echo ""
-echo " Starting Tkinter GUI..."
-python3 gui_app.py
+#!/usr/bin/env bash
+cd "$(dirname "$0")"
+if [ -f ".venv/bin/activate" ]; then
+    source .venv/bin/activate
+fi
+python3 launcher.py
