@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DAVID CYBER INTELLIGENCE SYSTEM</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0a0a0a; color: #00ff41; font-family: 'Courier New', monospace; }
+    .header {
+      background: #111;
+      border-bottom: 2px solid #00ff41;
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header h1 { font-size: 1.2rem; letter-spacing: 2px; }
+    .header .badge { background: #00ff41; color: #000; padding: 4px 12px; border-radius: 4px; font-size: 0.75rem; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      padding: 24px;
+    }
+    .card {
+      background: #111;
+      border: 1px solid #00ff4133;
+      border-radius: 8px;
+      padding: 20px;
+      transition: border-color 0.2s;
+    }
+    .card:hover { border-color: #00ff41; }
+    .card h3 { font-size: 0.85rem; color: #888; margin-bottom: 12px; letter-spacing: 1px; }
+    .card .value { font-size: 2rem; font-weight: bold; }
+    .card .value.red { color: #ff4141; }
+    .card .value.yellow { color: #ffd700; }
+    .card .value.green { color: #00ff41; }
+    .card .value.blue { color: #41b3ff; }
+    .section { padding: 0 24px 24px; }
+    .section h2 { font-size: 1rem; letter-spacing: 2px; margin-bottom: 16px; color: #00ff41; border-bottom: 1px solid #00ff4133; padding-bottom: 8px; }
+    .btn {
+      background: transparent;
+      border: 1px solid #00ff41;
+      color: #00ff41;
+      padding: 8px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: inherit;
+      margin: 4px;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: #00ff4122; }
+    .btn.danger { border-color: #ff4141; color: #ff4141; }
+    .btn.danger:hover { background: #ff414122; }
+    input[type="text"] {
+      background: #1a1a1a;
+      border: 1px solid #00ff4133;
+      color: #00ff41;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-family: inherit;
+      width: 300px;
+      margin-right: 8px;
+    }
+    input[type="text"]:focus { outline: none; border-color: #00ff41; }
+    .result-box {
+      background: #0d0d0d;
+      border: 1px solid #00ff4122;
+      border-radius: 4px;
+      padding: 16px;
+      margin-top: 12px;
+      font-size: 0.8rem;
+      max-height: 300px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      line-height: 1.6;
+    }
+    .alert-item {
+      background: #1a0000;
+      border-left: 3px solid #ff4141;
+      padding: 8px 12px;
+      margin: 4px 0;
+      border-radius: 0 4px 4px 0;
+      font-size: 0.8rem;
+    }
+    .threat-level {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+    .level-low { background: #004d00; color: #00ff41; }
+    .level-medium { background: #4d3d00; color: #ffd700; }
+    .level-high { background: #4d1a00; color: #ff8800; }
+    .level-critical { background: #4d0000; color: #ff4141; }
+    .tab-bar { display: flex; gap: 4px; padding: 16px 24px 0; border-bottom: 1px solid #00ff4133; }
+    .tab { padding: 8px 20px; cursor: pointer; border-radius: 4px 4px 0 0; font-size: 0.85rem; opacity: 0.5; }
+    .tab.active { background: #00ff4122; border: 1px solid #00ff4133; border-bottom: none; opacity: 1; }
+    .tab-content { display: none; padding: 24px; }
+    .tab-content.active { display: block; }
+    .footer { padding: 24px; text-align: center; font-size: 0.75rem; color: #333; border-top: 1px solid #111; }
+    .spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid #00ff4133; border-top-color: #00ff41; border-radius: 50%; animation: spin 0.8s linear infinite; margin-left: 8px; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>&#9632; DAVID CYBER INTELLIGENCE SYSTEM <span style="font-size:0.75rem;color:#888">v2.0</span></h1>
+    <div>
+      <span class="badge">DEVIL PVT LTD</span>&nbsp;
+      <span class="badge">NEXUZY TECH</span>
+    </div>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="grid" id="stats-grid">
+    <div class="card">
+      <h3>THREAT LEVEL</h3>
+      <div class="value red" id="threat-level">--</div>
+    </div>
+    <div class="card">
+      <h3>THREAT SCORE</h3>
+      <div class="value yellow" id="threat-score">0 / 100</div>
+    </div>
+    <div class="card">
+      <h3>ACTIVE MODULES</h3>
+      <div class="value green" id="active-modules">--</div>
+    </div>
+    <div class="card">
+      <h3>WAZUH ALERTS</h3>
+      <div class="value blue" id="wazuh-count">--</div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tab-bar">
+    <div class="tab active" onclick="showTab('scan')">SCAN</div>
+    <div class="tab" onclick="showTab('wazuh')">WAZUH</div>
+    <div class="tab" onclick="showTab('cloudflare')">CLOUDFLARE</div>
+    <div class="tab" onclick="showTab('tracking')">TRACKING</div>
+    <div class="tab" onclick="showTab('ai')">AI CHAT</div>
+  </div>
+
+  <!-- SCAN Tab -->
+  <div class="tab-content active" id="tab-scan">
+    <div class="section">
+      <h2>SECURITY SCAN</h2>
+      <div style="margin-bottom:16px">
+        <input type="text" id="scan-target" placeholder="Enter IP / Domain / URL" />
+        <button class="btn" onclick="runScan('zap')">ZAP Scan</button>
+        <button class="btn" onclick="runScan('openvas')">OpenVAS</button>
+        <button class="btn" onclick="runScan('pentest')">Pentest</button>
+        <button class="btn" onclick="runScan('osint')">OSINT</button>
+        <button class="btn danger" onclick="runScan('deepexploit')">DeepExploit</button>
+      </div>
+      <div class="result-box" id="scan-result">Results will appear here...</div>
+    </div>
+    <div class="section">
+      <h2>MALWARE ANALYSIS</h2>
+      <input type="text" id="malware-path" placeholder="File path (e.g. C:\file.exe)" />
+      <button class="btn" onclick="runMalware()">Analyze File</button>
+      <div class="result-box" id="malware-result">Results will appear here...</div>
+    </div>
+  </div>
+
+  <!-- WAZUH Tab -->
+  <div class="tab-content" id="tab-wazuh">
+    <div class="section">
+      <h2>WAZUH LIVE ALERTS</h2>
+      <button class="btn" onclick="loadWazuh()">Refresh Alerts</button>
+      <div id="wazuh-alerts" style="margin-top:16px">Click refresh to load alerts...</div>
+    </div>
+  </div>
+
+  <!-- CLOUDFLARE Tab -->
+  <div class="tab-content" id="tab-cloudflare">
+    <div class="section">
+      <h2>CLOUDFLARE PROTECTION</h2>
+      <button class="btn" onclick="loadCloudflare()">Load Stats</button>
+      <div class="result-box" id="cf-result">Click Load Stats...</div>
+    </div>
+  </div>
+
+  <!-- TRACKING Tab -->
+  <div class="tab-content" id="tab-tracking">
+    <div class="section">
+      <h2>GLOBAL TRACKING</h2>
+      <div style="margin-bottom:16px">
+        <input type="text" id="track-input" placeholder="Flight/MMSI/NORAD ID/IP" />
+        <button class="btn" onclick="track('flight')">Flight</button>
+        <button class="btn" onclick="track('ship')">Ship</button>
+        <button class="btn" onclick="track('satellite')">Satellite</button>
+        <button class="btn" onclick="track('geo')">Geo IP</button>
+      </div>
+      <div class="result-box" id="track-result">Results will appear here...</div>
+    </div>
+  </div>
+
+  <!-- AI Chat Tab -->
+  <div class="tab-content" id="tab-ai">
+    <div class="section">
+      <h2>AI BRAIN (LLM)</h2>
+      <input type="text" id="ai-query" placeholder="Ask cybersecurity question..." style="width:500px" />
+      <button class="btn" onclick="askAI()">Ask AI</button>
+      <div class="result-box" id="ai-result">AI responses appear here...</div>
+    </div>
+  </div>
+
+  <div class="footer">&copy; 2026 Devil Pvt Ltd &amp; Nexuzy Tech Pvt Ltd &mdash; DAVID CYBER INTELLIGENCE SYSTEM v2.0</div>
+
+  <script>
+    const API = '';
+
+    async function apiFetch(endpoint, method='GET', body=null) {
+      const opts = { method, headers: { 'Content-Type': 'application/json' } };
+      if (body) opts.body = JSON.stringify(body);
+      const r = await fetch(API + endpoint, opts);
+      return r.json();
+    }
+
+    async function loadHealth() {
+      try {
+        const d = await apiFetch('/health');
+        document.getElementById('active-modules').textContent = (d.loaded_modules || []).length;
+      } catch(e) { document.getElementById('active-modules').textContent = 'offline'; }
+    }
+
+    async function loadScore() {
+      try {
+        const d = await apiFetch('/score');
+        document.getElementById('threat-level').textContent = d.threat_level || '--';
+        document.getElementById('threat-score').textContent = (d.total_score || 0) + ' / 100';
+      } catch(e) {}
+    }
+
+    async function loadWazuhCount() {
+      try {
+        const d = await apiFetch('/api/wazuh/alerts?limit=5');
+        document.getElementById('wazuh-count').textContent = (d.alerts || []).length;
+      } catch(e) { document.getElementById('wazuh-count').textContent = 'offline'; }
+    }
+
+    function showTab(name) {
+      document.querySelectorAll('.tab').forEach((t,i) => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.getElementById('tab-' + name).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    async function runScan(type) {
+      const target = document.getElementById('scan-target').value.trim();
+      if (!target) return alert('Enter a target!');
+      document.getElementById('scan-result').innerHTML = 'Scanning... <span class="spinner"></span>';
+      try {
+        let data;
+        if (type === 'zap') data = await apiFetch('/api/zap/scan?url=' + encodeURIComponent(target), 'POST');
+        else if (type === 'openvas') data = await apiFetch('/api/openvas/scan?target=' + encodeURIComponent(target), 'POST');
+        else if (type === 'deepexploit') data = await apiFetch('/api/deepexploit?target=' + encodeURIComponent(target), 'POST');
+        else data = await apiFetch('/analyze', 'POST', { module: type, params: { target } });
+        document.getElementById('scan-result').textContent = JSON.stringify(data, null, 2);
+      } catch(e) { document.getElementById('scan-result').textContent = 'Error: ' + e.message; }
+    }
+
+    async function runMalware() {
+      const path = document.getElementById('malware-path').value.trim();
+      if (!path) return alert('Enter file path!');
+      document.getElementById('malware-result').innerHTML = 'Analyzing... <span class="spinner"></span>';
+      try {
+        const data = await apiFetch('/api/malware?file_path=' + encodeURIComponent(path), 'POST');
+        document.getElementById('malware-result').textContent = JSON.stringify(data, null, 2);
+      } catch(e) { document.getElementById('malware-result').textContent = 'Error: ' + e.message; }
+    }
+
+    async function loadWazuh() {
+      document.getElementById('wazuh-alerts').innerHTML = 'Loading... <span class="spinner"></span>';
+      try {
+        const d = await apiFetch('/api/wazuh/alerts?limit=20');
+        const alerts = d.alerts || [];
+        document.getElementById('wazuh-count').textContent = alerts.length;
+        if (!alerts.length) {
+          document.getElementById('wazuh-alerts').innerHTML = '<div style="color:#888">No alerts or Wazuh offline.</div>';
+          return;
+        }
+        document.getElementById('wazuh-alerts').innerHTML = alerts.map(a =>
+          `<div class="alert-item">${JSON.stringify(a).substring(0, 200)}</div>`
+        ).join('');
+      } catch(e) {
+        document.getElementById('wazuh-alerts').innerHTML = '<div style="color:#ff4141">Wazuh offline: ' + e.message + '</div>';
+      }
+    }
+
+    async function loadCloudflare() {
+      document.getElementById('cf-result').innerHTML = 'Loading... <span class="spinner"></span>';
+      try {
+        const d = await apiFetch('/api/cloudflare/stats');
+        document.getElementById('cf-result').textContent = JSON.stringify(d, null, 2);
+      } catch(e) { document.getElementById('cf-result').textContent = 'Error: ' + e.message; }
+    }
+
+    async function track(type) {
+      const val = document.getElementById('track-input').value.trim();
+      if (!val) return alert('Enter value!');
+      document.getElementById('track-result').innerHTML = 'Fetching... <span class="spinner"></span>';
+      try {
+        const paramKey = type === 'flight' ? 'callsign' : type === 'ship' ? 'mmsi' : type === 'satellite' ? 'sat_id' : 'ip';
+        const data = await apiFetch('/analyze', 'POST', { module: type, params: { [paramKey]: val } });
+        document.getElementById('track-result').textContent = JSON.stringify(data, null, 2);
+      } catch(e) { document.getElementById('track-result').textContent = 'Error: ' + e.message; }
+    }
+
+    async function askAI() {
+      const q = document.getElementById('ai-query').value.trim();
+      if (!q) return;
+      document.getElementById('ai-result').innerHTML = 'Thinking... <span class="spinner"></span>';
+      try {
+        const d = await apiFetch('/api/chat?query=' + encodeURIComponent(q), 'POST');
+        document.getElementById('ai-result').textContent = d.response || JSON.stringify(d, null, 2);
+      } catch(e) { document.getElementById('ai-result').textContent = 'Error: ' + e.message; }
+    }
+
+    // Init
+    loadHealth();
+    loadScore();
+    loadWazuhCount();
+    setInterval(() => { loadScore(); loadWazuhCount(); }, 30000);
+  </script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 """
-Task Router — Routes queries to appropriate engine modules
+Task Router v2 - Routes all modules with graceful fallbacks
+FIXED: All import errors caught individually, never crashes
 Developed by Devil Pvt Ltd & Nexuzy Tech Pvt Ltd
 """
 
@@ -7,123 +8,66 @@ from loguru import logger
 
 
 class TaskRouter:
-    """
-    Central router that directs user requests to the appropriate engine.
-    Supports: malware, network, osint, pentest, defense, intel,
-              flight, ship, satellite, geo, chat
-    """
-
     def __init__(self):
         self._engines = {}
         self._load_engines()
 
+    def _safe_load(self, key, loader_fn):
+        try:
+            self._engines[key] = loader_fn()
+            logger.success(f"[Router] Loaded: {key}")
+        except Exception as e:
+            logger.warning(f"[Router] {key} unavailable: {e}")
+
     def _load_engines(self):
-        # Lazy-load engines to prevent startup failures if optional deps missing
-        try:
-            from engines.malware_engine import MalwareEngine
-            self._engines["malware"] = MalwareEngine()
-        except Exception as e:
-            logger.warning(f"MalwareEngine load failed: {e}")
-
-        try:
-            from engines.network_engine import NetworkEngine
-            self._engines["network"] = NetworkEngine()
-        except Exception as e:
-            logger.warning(f"NetworkEngine load failed: {e}")
-
-        try:
-            from engines.osint_engine import OSINTEngine
-            self._engines["osint"] = OSINTEngine()
-        except Exception as e:
-            logger.warning(f"OSINTEngine load failed: {e}")
-
-        try:
-            from engines.pentest_engine import PentestEngine
-            self._engines["pentest"] = PentestEngine()
-        except Exception as e:
-            logger.warning(f"PentestEngine load failed: {e}")
-
-        try:
-            from engines.defense_engine import DefenseEngine
-            self._engines["defense"] = DefenseEngine()
-        except Exception as e:
-            logger.warning(f"DefenseEngine load failed: {e}")
-
-        try:
-            from intelligence.misp_client import MISPClient
-            self._engines["intel"] = MISPClient()
-        except Exception as e:
-            logger.warning(f"ThreatIntel load failed: {e}")
-
-        try:
-            from tracking.flight_tracker import FlightTracker
-            self._engines["flight"] = FlightTracker()
-        except Exception as e:
-            logger.warning(f"FlightTracker load failed: {e}")
-
-        try:
-            from tracking.ship_tracker import ShipTracker
-            self._engines["ship"] = ShipTracker()
-        except Exception as e:
-            logger.warning(f"ShipTracker load failed: {e}")
-
-        try:
-            from tracking.satellite_tracker import SatelliteTracker
-            self._engines["satellite"] = SatelliteTracker()
-        except Exception as e:
-            logger.warning(f"SatelliteTracker load failed: {e}")
-
-        try:
-            from tracking.geo_engine import GeoEngine
-            self._engines["geo"] = GeoEngine()
-        except Exception as e:
-            logger.warning(f"GeoEngine load failed: {e}")
-
-        try:
-            from core.llm_brain import LLMBrain
-            self._engines["chat"] = LLMBrain()
-        except Exception as e:
-            logger.warning(f"LLMBrain load failed: {e}")
+        self._safe_load("malware", lambda: __import__('engines.malware_engine', fromlist=['MalwareEngine']).MalwareEngine())
+        self._safe_load("network", lambda: __import__('engines.network_engine', fromlist=['NetworkEngine']).NetworkEngine())
+        self._safe_load("osint", lambda: __import__('engines.osint_engine', fromlist=['OSINTEngine']).OSINTEngine())
+        self._safe_load("pentest", lambda: __import__('engines.pentest_engine', fromlist=['PentestEngine']).PentestEngine())
+        self._safe_load("defense", lambda: __import__('engines.defense_engine', fromlist=['DefenseEngine']).DefenseEngine())
+        self._safe_load("intel", lambda: __import__('intelligence.misp_client', fromlist=['MISPClient']).MISPClient())
+        self._safe_load("flight", lambda: __import__('tracking.flight_tracker', fromlist=['FlightTracker']).FlightTracker())
+        self._safe_load("ship", lambda: __import__('tracking.ship_tracker', fromlist=['ShipTracker']).ShipTracker())
+        self._safe_load("satellite", lambda: __import__('tracking.satellite_tracker', fromlist=['SatelliteTracker']).SatelliteTracker())
+        self._safe_load("geo", lambda: __import__('tracking.geo_engine', fromlist=['GeoEngine']).GeoEngine())
+        self._safe_load("zap", lambda: __import__('security.zap_engine', fromlist=['ZAPEngine']).ZAPEngine())
+        self._safe_load("wazuh", lambda: __import__('security.wazuh_client', fromlist=['WazuhClient']).WazuhClient())
+        self._safe_load("openvas", lambda: __import__('security.openvas_client', fromlist=['OpenVASClient']).OpenVASClient())
+        self._safe_load("hydra", lambda: __import__('security.hydra_engine', fromlist=['HydraEngine']).HydraEngine())
+        self._safe_load("cloudflare", lambda: __import__('security.cloudflare_client', fromlist=['CloudflareClient']).CloudflareClient())
+        self._safe_load("deepexploit", lambda: __import__('security.deepexploit_engine', fromlist=['DeepExploitEngine']).DeepExploitEngine())
+        self._safe_load("chat", lambda: __import__('core.llm_brain', fromlist=['LLMBrain']).LLMBrain())
 
     def route(self, module: str, params: dict) -> dict:
-        """
-        Route a request to the correct engine.
-        Returns a result dict with status, data, and optional LLM explanation.
-        """
         module = module.lower().strip()
         engine = self._engines.get(module)
-
         if engine is None:
-            return {"status": "error", "message": f"Module '{module}' not available."}
-
-        logger.info(f"Routing to: {module} | Params: {params}")
-
+            return {"status": "error", "message": f"Module '{module}' not loaded. Check install."}
+        logger.info(f"[Router] -> {module} | {params}")
         try:
-            if module == "malware":
-                return engine.analyze(params.get("file_path", ""))
-            elif module == "network":
-                return engine.monitor(params.get("interface", "eth0"))
-            elif module == "osint":
-                return engine.investigate(params.get("target", ""))
-            elif module == "pentest":
-                return engine.run(params.get("target", ""))
-            elif module == "defense":
-                return engine.status()
-            elif module == "intel":
-                return engine.lookup(params.get("ioc", ""))
-            elif module == "flight":
-                return engine.track(params.get("callsign", ""))
-            elif module == "ship":
-                return engine.track(params.get("mmsi", ""))
-            elif module == "satellite":
-                return engine.track(params.get("sat_id", ""))
-            elif module == "geo":
-                return engine.map_ip(params.get("ip", ""))
-            elif module == "chat":
-                response = engine.think(params.get("query", ""))
-                return {"status": "ok", "response": response}
-            else:
-                return {"status": "error", "message": "Unknown module"}
+            dispatch = {
+                "malware": lambda: engine.analyze(params.get("file_path", "")),
+                "network": lambda: engine.monitor(params.get("interface", "eth0")),
+                "osint": lambda: engine.investigate(params.get("target", "")),
+                "pentest": lambda: engine.run(params.get("target", "")),
+                "defense": lambda: engine.status(),
+                "intel": lambda: engine.lookup(params.get("ioc", "")),
+                "flight": lambda: engine.track(params.get("callsign", "")),
+                "ship": lambda: engine.track(params.get("mmsi", "")),
+                "satellite": lambda: engine.track(params.get("sat_id", "")),
+                "geo": lambda: engine.map_ip(params.get("ip", "")),
+                "zap": lambda: engine.scan(params.get("url", "")),
+                "wazuh": lambda: engine.get_alerts(params.get("limit", 20)),
+                "openvas": lambda: engine.scan(params.get("target", "")),
+                "hydra": lambda: engine.test(params.get("target", ""), params.get("service", "ssh")),
+                "cloudflare": lambda: engine.get_stats(params.get("zone_id", "")),
+                "deepexploit": lambda: engine.exploit(params.get("target", "")),
+                "chat": lambda: {"status": "ok", "response": engine.think(params.get("query", ""))},
+            }
+            fn = dispatch.get(module)
+            if fn:
+                return fn()
+            return {"status": "error", "message": "No dispatch handler found"}
         except Exception as e:
-            logger.error(f"Engine error in {module}: {e}")
+            logger.error(f"[Router] Engine crash in {module}: {e}")
             return {"status": "error", "message": str(e)}

@@ -1,105 +1,138 @@
 #!/usr/bin/env python3
 """
-DAVID CYBER INTELLIGENCE SYSTEM
+DAVID CYBER INTELLIGENCE SYSTEM v2.0
 Developed by Devil Pvt Ltd & Nexuzy Tech Pvt Ltd
-CLI Entry Point — Works on Windows, macOS, Linux
+CLI Entry Point - Windows | macOS | Linux
 """
 
 import sys
-import os
 from rich.console import Console
 from rich.panel import Panel
 from rich.prompt import Prompt
-from rich import print as rprint
+from rich.table import Table
 
 console = Console()
 
-BANNER = """
-██████╗  █████╗ ██╗   ██╗██╗██████╗      ██████╗██╗   ██╗██████╗ ███████╗██████╗ 
-██╔══██╗██╔══██╗██║   ██║██║██╔══██╗    ██╔════╝╚██╗ ██╔╝██╔══██╗██╔════╝██╔══██╗
-██║  ██║███████║██║   ██║██║██║  ██║    ██║      ╚████╔╝ ██████╔╝█████╗  ██████╔╝
-██║  ██║██╔══██║╚██╗ ██╔╝██║██║  ██║    ██║       ╚██╔╝  ██╔══██╗██╔══╝  ██╔══██╗
-██████╔╝██║  ██║ ╚████╔╝ ██║██████╔╝    ╚██████╗   ██║   ██████╔╝███████╗██║  ██║
-╚═════╝ ╚═╝  ╚═╝  ╚═══╝  ╚═╝╚═════╝      ╚═════╝   ╚═╝   ╚═════╝ ╚══════╝╚═╝  ╚═╝
+BANNER = """[bold cyan]
+██████╗  █████╗ ██╗   ██╗██╗██████╗      ██████╗██╗ ██╗██████╗ ███████╗██████╗
+██╔══██╗██╔══██╗██║   ██║██║██╔══██╗    ██╔════╝██║ ██║██╔══██╗██╔════╝██╔══██╗
+██║  ██║███████║██║   ██║██║██║  ██║    ██║      ██████╔╝██████╔╝█████╗  ██████╔╝
+██║  ██║██╔══██║╚██╗ ██╔╝██║██║  ██║    ██║      ██╔══██╗██╔══██╗██╔══╝  ██╔══██╗
+██████╔╝██║  ██║ ╚████╔╝ ██║██████╔╝    ╚██████╗██║  ██║██████╔╝███████╗██║  ██║
+╚═════╝ ╚═╝  ╚═╝  ╚═══╝  ╚═╝╚═════╝      ╚═════╝╚═╝  ╚═╝╚═════╝╚══════╝╚═╝  ╚═╝
+     [/bold cyan][dim]INTELLIGENCE SYSTEM v2.0 | Devil Pvt Ltd & Nexuzy Tech Pvt Ltd[/dim]"""
 
-            INTELLIGENCE SYSTEM v1.0 | Devil Pvt Ltd & Nexuzy Tech Pvt Ltd
-"""
+MODULES = [
+    ("1",  "🦠", "Malware Analysis",      "malware"),
+    ("2",  "🌐", "Network IDS",           "network"),
+    ("3",  "🕵️",  "OSINT Investigation",  "osint"),
+    ("4",  "🧪", "Pentest Engine",        "pentest"),
+    ("5",  "🛡️",  "Defense Engine",       "defense"),
+    ("6",  "🧠", "Threat Intelligence",   "intel"),
+    ("7",  "✈️",  "Flight Tracker",        "flight"),
+    ("8",  "🚢", "Ship Tracker",          "ship"),
+    ("9",  "🛰️",  "Satellite Tracker",    "satellite"),
+    ("10", "🗺️",  "Geo Intelligence",     "geo"),
+    ("11", "🔍", "OWASP ZAP Scan",        "zap"),
+    ("12", "📊", "Wazuh Alerts",          "wazuh"),
+    ("13", "🕳️", "OpenVAS CVE Scan",     "openvas"),
+    ("14", "🔑", "Hydra Brute Test",      "hydra"),
+    ("15", "☁️", "Cloudflare Stats",      "cloudflare"),
+    ("16", "🤖", "DeepExploit (RL)",      "deepexploit"),
+    ("17", "💬", "AI Brain Chat",         "chat"),
+    ("18", "🌐", "API Dashboard",         "dashboard"),
+    ("0",  "🚪", "Exit",                  "exit"),
+]
 
-MENU = """
-[1]  🦠  Malware Analysis
-[2]  🌐  Network IDS
-[3]  🕵️   OSINT Investigation
-[4]  🧪  Pentest Engine
-[5]  🛡️   Defense Engine
-[6]  🧠  Threat Intelligence
-[7]  ✈️   Flight Tracker
-[8]  🚢  Ship Tracker
-[9]  🛰️   Satellite Tracker
-[10] 🗺️   Geo Intelligence
-[11] 💬  AI Chat (LLM Brain)
-[0]  🚪  Exit
-"""
 
 def print_banner():
-    console.print(Panel(BANNER, style="bold cyan"))
+    console.print(Panel(BANNER, border_style="cyan", padding=(0, 2)))
 
-def run_menu():
+
+def print_menu():
+    table = Table(show_header=False, box=None, padding=(0, 2))
+    table.add_column(style="dim", width=4)
+    table.add_column(width=3)
+    table.add_column(style="bold green")
+    for num, icon, name, _ in MODULES:
+        table.add_row(f"[{num}]", icon, name)
+    console.print(Panel(table, title="[bold green]SELECT MODULE[/bold green]", border_style="green"))
+
+
+def run_dashboard():
+    import uvicorn
+    console.print("[cyan]Starting API + Dashboard on http://0.0.0.0:8000[/cyan]")
+    console.print("[dim]Docs: http://localhost:8000/docs | Dashboard: http://localhost:8000[/dim]")
+    uvicorn.run("core.api:app", host="0.0.0.0", port=8000, reload=False)
+
+
+def main():
     from core.task_router import TaskRouter
     router = TaskRouter()
 
+    print_banner()
+    console.print(f"[dim]Loaded modules: {list(router._engines.keys())}[/dim]\n")
+
     while True:
-        console.print(Panel(MENU, title="[bold green]DAVID CYBER INTELLIGENCE SYSTEM[/bold green]", style="green"))
-        choice = Prompt.ask("[bold yellow]Select Module[/bold yellow]")
+        print_menu()
+        choice = Prompt.ask("[bold yellow]>[/bold yellow]").strip()
 
         if choice == "0":
-            console.print("[bold red]Exiting... Stay Secure! 🛡️[/bold red]")
+            console.print("[bold red]Stay Secure! 🛡️ Goodbye.[/bold red]")
             sys.exit(0)
-        elif choice == "1":
-            path = Prompt.ask("[cyan]Enter file path for malware analysis[/cyan]")
-            result = router.route("malware", {"file_path": path})
-            console.print(Panel(str(result), title="🦠 Malware Result", style="red"))
-        elif choice == "2":
-            iface = Prompt.ask("[cyan]Enter network interface (e.g. eth0)[/cyan]")
-            result = router.route("network", {"interface": iface})
-            console.print(Panel(str(result), title="🌐 Network IDS Result", style="blue"))
-        elif choice == "3":
-            target = Prompt.ask("[cyan]Enter target IP/Domain/Email[/cyan]")
-            result = router.route("osint", {"target": target})
-            console.print(Panel(str(result), title="🕵️ OSINT Result", style="magenta"))
-        elif choice == "4":
-            target = Prompt.ask("[cyan]Enter target IP/Host[/cyan]")
-            result = router.route("pentest", {"target": target})
-            console.print(Panel(str(result), title="🧪 Pentest Result", style="yellow"))
-        elif choice == "5":
-            result = router.route("defense", {})
-            console.print(Panel(str(result), title="🛡️ Defense Engine", style="green"))
-        elif choice == "6":
-            ioc = Prompt.ask("[cyan]Enter IOC (IP/Hash/Domain)[/cyan]")
-            result = router.route("intel", {"ioc": ioc})
-            console.print(Panel(str(result), title="🧠 Threat Intel", style="cyan"))
-        elif choice == "7":
-            callsign = Prompt.ask("[cyan]Enter ICAO24 or flight callsign[/cyan]")
-            result = router.route("flight", {"callsign": callsign})
-            console.print(Panel(str(result), title="✈️ Flight Tracker", style="blue"))
-        elif choice == "8":
-            mmsi = Prompt.ask("[cyan]Enter vessel MMSI number[/cyan]")
-            result = router.route("ship", {"mmsi": mmsi})
-            console.print(Panel(str(result), title="🚢 Ship Tracker", style="cyan"))
-        elif choice == "9":
-            sat_id = Prompt.ask("[cyan]Enter NORAD satellite ID[/cyan]")
-            result = router.route("satellite", {"sat_id": sat_id})
-            console.print(Panel(str(result), title="🛰️ Satellite Tracker", style="magenta"))
-        elif choice == "10":
-            ip = Prompt.ask("[cyan]Enter IP for geo mapping[/cyan]")
-            result = router.route("geo", {"ip": ip})
-            console.print(Panel(str(result), title="🗺️ Geo Intelligence", style="green"))
-        elif choice == "11":
-            query = Prompt.ask("[cyan]Enter your query[/cyan]")
-            result = router.route("chat", {"query": query})
-            console.print(Panel(str(result), title="💬 LLM Response", style="white"))
-        else:
-            console.print("[red]Invalid choice. Try again.[/red]")
+
+        if choice == "18":
+            run_dashboard()
+            continue
+
+        module_map = {m[0]: (m[2], m[3]) for m in MODULES}
+        if choice not in module_map:
+            console.print("[red]Invalid choice.[/red]")
+            continue
+
+        label, mod = module_map[choice]
+        console.print(f"\n[cyan]=== {label} ===[/cyan]")
+
+        try:
+            params = {}
+            if mod == "malware":
+                params["file_path"] = Prompt.ask("File path")
+            elif mod == "network":
+                params["interface"] = Prompt.ask("Interface", default="eth0")
+            elif mod in ("osint", "pentest", "openvas", "deepexploit"):
+                params["target"] = Prompt.ask("Target IP/Domain")
+            elif mod == "intel":
+                params["ioc"] = Prompt.ask("IOC (IP/Hash/Domain)")
+            elif mod == "flight":
+                params["callsign"] = Prompt.ask("ICAO24/Callsign")
+            elif mod == "ship":
+                params["mmsi"] = Prompt.ask("Vessel MMSI")
+            elif mod == "satellite":
+                params["sat_id"] = Prompt.ask("NORAD ID")
+            elif mod == "geo":
+                params["ip"] = Prompt.ask("IP address")
+            elif mod == "zap":
+                params["url"] = Prompt.ask("Target URL")
+            elif mod == "wazuh":
+                params["limit"] = int(Prompt.ask("Alert limit", default="20"))
+            elif mod == "hydra":
+                params["target"] = Prompt.ask("Target host")
+                params["service"] = Prompt.ask("Service", default="ssh")
+            elif mod == "chat":
+                params["query"] = Prompt.ask("Your query")
+            elif mod == "cloudflare":
+                params["zone_id"] = Prompt.ask("Zone ID (optional)", default="")
+            elif mod == "defense":
+                pass
+
+            result = router.route(mod, params)
+            console.print_json(data=result)
+
+        except KeyboardInterrupt:
+            console.print("\n[dim]Cancelled.[/dim]")
+        except Exception as e:
+            console.print(f"[red]Error: {e}[/red]")
+
 
 if __name__ == "__main__":
-    print_banner()
-    run_menu()
+    main()
