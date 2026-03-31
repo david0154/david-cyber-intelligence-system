@@ -1,4 +1,4 @@
-# DAVID CYBER INTELLIGENCE SYSTEM v3.0
+# DAVID CYBER INTELLIGENCE SYSTEM v1.0
 
 <div align="center">
 
@@ -8,7 +8,7 @@
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python)
 ![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-green?style=for-the-badge)
-![Version](https://img.shields.io/badge/Version-3.0.0-red?style=for-the-badge)
+![Version](https://img.shields.io/badge/Version-1.0.0-red?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-Proprietary-orange?style=for-the-badge)
 
 > **A TRUE AI-Powered Cybersecurity Platform — NOT just an AI assistant**
