@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![DAVID CIS Logo](assets/logo.jpg)
+![DAVID CIS Logo](assets/logo.png)
 
 **Developed by Devil Pvt Ltd & Nexuzy Tech Pvt Ltd**
 
