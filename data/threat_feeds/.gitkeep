@@ -1,0 +1,3 @@
+# Place threat feed files here
+# Supported formats: .csv, .txt, .json
+# Sources: MISP feeds, abuse.ch, OpenPhish

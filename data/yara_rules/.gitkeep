@@ -1,0 +1,3 @@
+# Place your .yar YARA rule files here
+# Example: malware_generic.yar, ransomware.yar
+# Download rules from: https://github.com/Yara-Rules/rules
