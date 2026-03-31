@@ -1,200 +1,194 @@
-#!/usr/bin/env python3
 """
-DAVID CYBER INTELLIGENCE SYSTEM
-Alerting Module — automation/alerting.py
-
-Sends alerts via:
-  - Telegram Bot (instant push notification)
-  - SMTP Email   (with HTML report attached)
-  - Desktop popup (Tkinter, no external service)
-  - Log file     (always, as fallback)
-
-Required .env variables:
-  TELEGRAM_BOT_TOKEN  — from t.me/botfather
-  TELEGRAM_CHAT_ID    — your chat ID
-  SMTP_HOST           — e.g. smtp.gmail.com
-  SMTP_PORT           — e.g. 587
-  SMTP_USER           — your email
-  SMTP_PASS           — app password
-  ALERT_EMAIL         — destination email
-
+Alerting Module — Full Implementation
+Telegram + Email (SMTP) + Desktop notifications
 Developed by Devil Pvt Ltd & Nexuzy Tech Pvt Ltd
 """
 
 import os
 import smtplib
-import threading
-import requests
-from email.mime.text      import MIMEText
+import json
+from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from datetime             import datetime
-from loguru               import logger
-from typing               import Optional
-
-# ── Env
-TELEGRAM_TOKEN   = os.getenv("TELEGRAM_BOT_TOKEN", "")
-TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")
-SMTP_HOST        = os.getenv("SMTP_HOST", "smtp.gmail.com")
-SMTP_PORT        = int(os.getenv("SMTP_PORT", "587"))
-SMTP_USER        = os.getenv("SMTP_USER", "")
-SMTP_PASS        = os.getenv("SMTP_PASS", "")
-ALERT_EMAIL      = os.getenv("ALERT_EMAIL", SMTP_USER)
-
-SEVERITY_EMOJI = {
-    "CRITICAL": "🔴",
-    "HIGH":     "🟠",
-    "MEDIUM":   "🟡",
-    "LOW":      "🟢",
-    "INFO":     "ℹ️",
-}
+from email.mime.base import MIMEBase
+from email import encoders
+from datetime import datetime
+from loguru import logger
 
 
 class AlertManager:
     """
-    Central alerting hub. Call send() from any module.
-    All sends are non-blocking (background thread).
+    Sends alerts via Telegram bot, SMTP email, and desktop toast.
+    Reads from .env:
+      TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
+      SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, ALERT_EMAIL
     """
 
+    SEVERITY_EMOJI = {
+        "CRITICAL": "\U0001f534",
+        "HIGH":     "\U0001f7e0",
+        "MEDIUM":   "\U0001f7e1",
+        "LOW":      "\U0001f7e2",
+        "INFO":     "\u2139\ufe0f",
+    }
+
     def __init__(self):
-        self._session = requests.Session()
+        self.tg_token   = os.getenv("TELEGRAM_BOT_TOKEN", "")
+        self.tg_chat_id = os.getenv("TELEGRAM_CHAT_ID", "")
+        self.smtp_host  = os.getenv("SMTP_HOST", "smtp.gmail.com")
+        self.smtp_port  = int(os.getenv("SMTP_PORT", "587"))
+        self.smtp_user  = os.getenv("SMTP_USER", "")
+        self.smtp_pass  = os.getenv("SMTP_PASS", "")
+        self.alert_email= os.getenv("ALERT_EMAIL", self.smtp_user)
+        self._history: list = []
+        logger.success("AlertManager ready.")
 
-    # ── Public API ────────────────────────────────────────────────────────────
-    def send(self, title: str, body: str, severity: str = "HIGH",
-             source: str = "", extra: dict = None):
-        """
-        Send alert via all configured channels.
-        Non-blocking — fires in background thread.
-        """
-        event = {
-            "title":     title,
-            "body":      body,
-            "severity":  severity.upper(),
-            "source":    source,
-            "extra":     extra or {},
-            "timestamp": datetime.utcnow().isoformat()
+    # ─────────────────────────────────────────
+    #  MAIN SEND
+    # ─────────────────────────────────────────
+    def send(self, title: str, message: str,
+             severity: str = "HIGH", attachment_path: str = "") -> dict:
+        """Send alert via all configured channels."""
+        severity = severity.upper()
+        emoji = self.SEVERITY_EMOJI.get(severity, "\u26a0\ufe0f")
+        full_title = f"{emoji} DAVID CIS [{severity}] — {title}"
+
+        entry = {
+            "title": full_title,
+            "message": message[:500],
+            "severity": severity,
+            "timestamp": datetime.utcnow().isoformat(),
+            "channels": [],
         }
-        logger.warning(f"[Alert] {severity} | {title} | {body[:80]}")
-        threading.Thread(
-            target=self._dispatch, args=(event,), daemon=True
-        ).start()
 
-    # ── Dispatch ──────────────────────────────────────────────────────────────
-    def _dispatch(self, event: dict):
-        if TELEGRAM_TOKEN and TELEGRAM_CHAT_ID:
-            self._send_telegram(event)
-        if SMTP_USER and SMTP_PASS and ALERT_EMAIL:
-            self._send_email(event)
-        # Desktop popup — always works, no config needed
-        self._send_desktop(event)
+        # Telegram
+        tg_ok = self._send_telegram(full_title, message)
+        if tg_ok:  entry["channels"].append("telegram")
 
-    # ── Telegram ──────────────────────────────────────────────────────────────
-    def _send_telegram(self, event: dict):
-        emoji = SEVERITY_EMOJI.get(event["severity"], "⚠️")
-        text  = (
-            f"{emoji} *DAVID CIS Alert*\n"
-            f"*{event['title']}*\n"
-            f"Severity: `{event['severity']}`\n"
-            f"Source: `{event['source'] or 'System'}`\n"
-            f"Time: `{event['timestamp']}`\n\n"
-            f"{event['body'][:800]}"
-        )
+        # Email
+        if severity in ("CRITICAL", "HIGH"):
+            mail_ok = self._send_email(full_title, message, attachment_path)
+            if mail_ok: entry["channels"].append("email")
+
+        # Desktop notification
+        self._desktop_notify(full_title, message)
+        entry["channels"].append("desktop")
+
+        self._history.append(entry)
+        return entry
+
+    # ─────────────────────────────────────────
+    #  TELEGRAM
+    # ─────────────────────────────────────────
+    def _send_telegram(self, title: str, message: str) -> bool:
+        if not self.tg_token or not self.tg_chat_id:
+            return False
         try:
-            url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
-            r   = self._session.post(url, json={
-                "chat_id":    TELEGRAM_CHAT_ID,
-                "text":       text,
-                "parse_mode": "Markdown"
-            }, timeout=10)
-            if r.status_code == 200:
-                logger.info("[Alert] Telegram sent ✓")
+            import requests
+            text = f"*{title}*\n\n{message[:3000]}"
+            r = requests.post(
+                f"https://api.telegram.org/bot{self.tg_token}/sendMessage",
+                json={
+                    "chat_id": self.tg_chat_id,
+                    "text": text,
+                    "parse_mode": "Markdown",
+                },
+                timeout=8,
+            )
+            ok = r.json().get("ok", False)
+            if ok:
+                logger.success(f"Telegram alert sent: {title[:50]}")
             else:
-                logger.warning(f"[Alert] Telegram failed: {r.status_code} {r.text[:100]}")
+                logger.warning(f"Telegram error: {r.json().get('description')}")
+            return ok
         except Exception as e:
-            logger.error(f"[Alert] Telegram error: {e}")
+            logger.error(f"Telegram send failed: {e}")
+            return False
 
-    # ── Email ─────────────────────────────────────────────────────────────────
-    def _send_email(self, event: dict):
-        emoji = SEVERITY_EMOJI.get(event["severity"], "⚠️")
-        subject = f"[DAVID CIS] {emoji} {event['severity']}: {event['title']}"
-        html = f"""
-        <html><body style="font-family:monospace;background:#0a0a0f;color:#ccc;padding:20px">
-          <h2 style="color:#ff4444">{emoji} DAVID CIS Security Alert</h2>
-          <table style="width:100%;border-collapse:collapse">
-            <tr><td style="color:#888;width:120px">Title</td>
-                <td style="color:#fff">{event['title']}</td></tr>
-            <tr><td style="color:#888">Severity</td>
-                <td style="color:#ff8800">{event['severity']}</td></tr>
-            <tr><td style="color:#888">Source</td>
-                <td>{event['source'] or 'System'}</td></tr>
-            <tr><td style="color:#888">Time</td>
-                <td>{event['timestamp']}</td></tr>
-          </table>
-          <hr style="border-color:#333">
-          <pre style="color:#aaffaa;white-space:pre-wrap">{event['body']}</pre>
-          <hr style="border-color:#333">
-          <small style="color:#555">DAVID Cyber Intelligence System — Nexuzy Tech Pvt Ltd</small>
-        </body></html>
-        """
-        msg = MIMEMultipart("alternative")
-        msg["Subject"] = subject
-        msg["From"]    = SMTP_USER
-        msg["To"]      = ALERT_EMAIL
-        msg.attach(MIMEText(html, "html"))
+    # ─────────────────────────────────────────
+    #  EMAIL
+    # ─────────────────────────────────────────
+    def _send_email(self, subject: str, body: str,
+                    attachment_path: str = "") -> bool:
+        if not self.smtp_user or not self.smtp_pass:
+            logger.warning("Email not configured — set SMTP_USER and SMTP_PASS")
+            return False
+        if not self.alert_email:
+            logger.warning("ALERT_EMAIL not set")
+            return False
         try:
-            with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=10) as s:
-                s.ehlo()
-                s.starttls()
-                s.login(SMTP_USER, SMTP_PASS)
-                s.sendmail(SMTP_USER, ALERT_EMAIL, msg.as_string())
-            logger.info("[Alert] Email sent ✓")
+            msg = MIMEMultipart()
+            msg["From"]    = self.smtp_user
+            msg["To"]      = self.alert_email
+            msg["Subject"] = subject
+            msg.attach(MIMEText(body, "plain"))
+
+            if attachment_path and os.path.exists(attachment_path):
+                with open(attachment_path, "rb") as f:
+                    part = MIMEBase("application", "octet-stream")
+                    part.set_payload(f.read())
+                encoders.encode_base64(part)
+                fname = os.path.basename(attachment_path)
+                part.add_header("Content-Disposition",
+                                f"attachment; filename={fname}")
+                msg.attach(part)
+
+            with smtplib.SMTP(self.smtp_host, self.smtp_port) as server:
+                server.ehlo()
+                server.starttls()
+                server.login(self.smtp_user, self.smtp_pass)
+                server.sendmail(self.smtp_user, self.alert_email,
+                                msg.as_string())
+            logger.success(f"Email alert sent to {self.alert_email}")
+            return True
         except smtplib.SMTPAuthenticationError:
-            logger.error("[Alert] SMTP auth failed — check SMTP_USER/SMTP_PASS in .env")
+            logger.error("SMTP auth failed — check SMTP_USER/SMTP_PASS")
+            return False
+        except smtplib.SMTPConnectError:
+            logger.error(f"SMTP connect failed — check SMTP_HOST={self.smtp_host} SMTP_PORT={self.smtp_port}")
+            return False
         except Exception as e:
-            logger.error(f"[Alert] Email error: {e}")
+            logger.error(f"Email send failed: {e}")
+            return False
 
-    # ── Desktop popup ─────────────────────────────────────────────────────────
-    def _send_desktop(self, event: dict):
-        """Non-blocking Tkinter popup."""
-        def show():
-            try:
-                import tkinter as tk
-                from tkinter import messagebox
-                root = tk.Tk()
-                root.withdraw()
-                emoji = SEVERITY_EMOJI.get(event["severity"], "⚠️")
-                messagebox.showwarning(
-                    title=f"{emoji} {event['severity']}: {event['title']}",
-                    message=event["body"][:300]
-                )
-                root.destroy()
-            except Exception:
-                pass
-        # Only show popups for HIGH/CRITICAL
-        if event["severity"] in ("CRITICAL", "HIGH"):
-            threading.Thread(target=show, daemon=True).start()
+    # ─────────────────────────────────────────
+    #  DESKTOP NOTIFICATION
+    # ─────────────────────────────────────────
+    def _desktop_notify(self, title: str, message: str):
+        try:
+            import platform
+            system = platform.system()
+            if system == "Windows":
+                try:
+                    from win10toast import ToastNotifier
+                    ToastNotifier().show_toast(
+                        title, message[:200], duration=6, threaded=True)
+                except ImportError:
+                    pass
+            elif system == "Linux":
+                import subprocess
+                subprocess.run(["notify-send", title[:80], message[:200]],
+                               capture_output=True, timeout=3)
+            elif system == "Darwin":
+                import subprocess
+                script = f'display notification "{message[:200]}" with title "{title[:80]}"'
+                subprocess.run(["osascript", "-e", script],
+                               capture_output=True, timeout=3)
+        except Exception:
+            pass
 
+    # ─────────────────────────────────────────
+    #  ALERT HISTORY
+    # ─────────────────────────────────────────
+    def get_history(self, limit: int = 50) -> list:
+        return self._history[-limit:]
 
-# ── Convenience singleton
-_manager = None
+    def clear_history(self):
+        self._history = []
 
-def get_alert_manager() -> AlertManager:
-    global _manager
-    if _manager is None:
-        _manager = AlertManager()
-    return _manager
-
-def alert(title: str, body: str, severity: str = "HIGH",
-          source: str = "", extra: dict = None):
-    """Module-level shortcut: from automation.alerting import alert."""
-    get_alert_manager().send(title, body, severity, source, extra)
-
-
-if __name__ == "__main__":
-    a = AlertManager()
-    a.send(
-        title="Test Alert",
-        body="This is a test from DAVID CIS alerting module.",
-        severity="HIGH",
-        source="test"
-    )
-    import time; time.sleep(3)
+    def test_channels(self) -> dict:
+        """Send a test alert to verify all channels work."""
+        return self.send(
+            title="Test Alert",
+            message="DAVID CIS alerting system is working correctly.",
+            severity="INFO",
+        )
