@@ -1,17 +1,29 @@
-# DAVID CYBER INTELLIGENCE SYSTEM v3.1
+# DAVID CYBER INTELLIGENCE SYSTEM
 
 <div align="center">
 
-![DAVID CIS Logo](assets/logo.jpg)
+![DAVID CIS Logo](assets/logo.png)
 
 **Developed by Devil Pvt Ltd & Nexuzy Tech Pvt Ltd**
 
-![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python)
-![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-green?style=for-the-badge)
-![Version](https://img.shields.io/badge/Version-3.1.0-red?style=for-the-badge)
-![License](https://img.shields.io/badge/License-Proprietary-orange?style=for-the-badge)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python)](https://python.org)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-green?style=for-the-badge)](#-quick-start)
+[![Version](https://img.shields.io/badge/Version-1.0.0-red?style=for-the-badge)](#)
+[![License](https://img.shields.io/badge/License-Proprietary-orange?style=for-the-badge)](#️-legal-disclaimer)
+[![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge)](#)
 
-> **A TRUE AI-Powered Cybersecurity Platform — Security Analysis · Defense · Bug Hunting · Tracking**
+```
+██████╗  █████╗ ██╗   ██╗██╗██████╗
+██╔══██╗██╔══██╗██║   ██║██║██╔══██╗
+██║  ██║███████║██║   ██║██║██║  ██║
+██║  ██║██╔══██║╚██╗ ██╔╝██║██║  ██║
+██████╔╝██║  ██║ ╚████╔╝ ██║██████╔╝
+╚═════╝ ╚═╝  ╚═╝  ╚═══╝  ╚═╝╚═════╝
+  CYBER INTELLIGENCE SYSTEM  v1.0
+```
+
+> **A TRUE AI-Powered Cybersecurity Platform**
+> Security Analysis · Real-Time Defense · Bug Hunting · Live Global Tracking
 
 </div>
 
@@ -19,380 +31,471 @@
 
 ## 🗺️ Table of Contents
 
-1. [Core Architecture](#-core-architecture)
-2. [ALL Features Explained](#-all-features-explained)
-3. [Required API Keys](#-required-api-keys--where-to-get-them)
-4. [Free vs Paid APIs](#-free-vs-paid-api-summary)
-5. [App Bug Analyzer](#-app-bug-analyzer-new)
+1. [What Is DAVID?](#-what-is-david)
+2. [Core Architecture](#-core-architecture)
+3. [All Features](#-all-features)
+   - [Offensive Security](#-1-offensive-security-engine)
+   - [Malware Analysis](#-2-malware-analysis-engine)
+   - [Network IDS](#-3-network-ids--live-attack-map)
+   - [OSINT Investigation](#-4-osint-investigation-engine)
+   - [Defense / WAF](#-5-defense-engine--waf)
+   - [Threat Intelligence](#-6-threat-intelligence-engine)
+   - [SOC / SIEM](#-7-soc--siem-layer)
+   - [Bug Bounty Platform](#-8-bug-bounty-platform)
+   - [App Bug Analyzer](#-9-app-bug-analyzer)
+   - [Live Cyber Attack Map](#-10-live-cyber-attack-map)
+   - [Flight Tracking](#-11-live-flight-tracking)
+   - [Ship Tracking](#-12-live-ship-tracking)
+   - [Satellite Tracking](#-13-live-satellite-tracking)
+   - [IP Geolocation](#-14-ip-geolocation)
+   - [Automation & Alerts](#-15-automation--alerting)
+4. [Required API Keys](#-required-api-keys)
+5. [Complete .env Template](#-complete-env-template)
 6. [Data Layer](#-data-layer)
 7. [Quick Start](#-quick-start)
-8. [AI Commands](#-ai-natural-language-commands)
-9. [Legal](#️-legal-disclaimer)
+8. [Install as Normal Software](#-install-as-normal-software)
+9. [AI Commands](#-ai-natural-language-commands)
+10. [Legal Disclaimer](#️-legal-disclaimer)
+
+---
+
+## 🧠 What Is DAVID?
+
+DAVID (Defense & Attack Versatile Intelligence Daemon) is a complete AI-powered cybersecurity platform that runs on your desktop — **Windows, macOS, or Linux** — like any normal software. It combines:
+
+- 🔴 **Offensive tools** — Nmap, SQLMap, Hydra, Metasploit, OWASP ZAP
+- 🦠 **Malware analysis** — YARA, pefile, capstone, AI behavior analysis
+- 🌐 **Network monitoring** — Scapy, Suricata IDS, LSTM anomaly detection
+- 🕵️ **OSINT** — SpiderFoot, Shodan, theHarvester, CyNER AI
+- 🛡️ **Defense** — Open-AppSec ML WAF, auto IP blocking
+- 🧠 **AI brain** — Local Mixtral LLM (runs offline, no API cost)
+- ✈️ **Live tracking** — Flights, ships, satellites, cyber attacks on world map
+- 🐛 **Bug finder** — Analyzes any APK/EXE/PHP/Python/JS for security bugs
+- 🏆 **Bug bounty** — Full platform with CVSS scoring and rewards
+
+All controlled from **one GUI application** with a dark cyberpunk interface.
 
 ---
 
 ## 🏗️ Core Architecture
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│                LLM BRAIN  (Mixtral GGUF)                     │
-│                via ctransformers  (runs offline)             │
-│        Intent · Reasoning · Explanation · Routing            │
-└──────────────────────────┬───────────────────────────────────┘
-                           │
-                  ┌────────▼────────┐
-                  │   TASK ROUTER   │
-                  └────────┬────────┘
-                           │
- ┌──────────┬──────────┬───┴──────┬──────────┬──────────┐
- │ Malware  │ Network  │  OSINT   │ Pentest  │ Defense  │
- │ Engine   │ IDS      │  Engine  │ Engine   │ Engine   │
- └──────────┴──────────┴──────────┴──────────┴──────────┘
-                  ┌────────┬────────┐
-                  │ Bug    │ SOC /  │
-                  │Analyzer│ SIEM   │
-                  └────────┴────────┘
-                           │
-              Threat Intelligence Layer
-               (MISP + OpenCTI + Neo4j)
-                           │
-                  Unified Threat Score
-               PostgreSQL · ELK · SQLite
+┌─────────────────────────────────────────────────────────────────┐
+│               LLM BRAIN  (Mixtral-8x7B GGUF)                   │
+│               via ctransformers  ─  runs 100% OFFLINE           │
+│         Intent · Reasoning · Explanation · Task Routing         │
+└───────────────────────────┬─────────────────────────────────────┘
+                            │
+               ┌────────────▼────────────┐
+               │       TASK ROUTER       │
+               │  Routes input to module │
+               └────────────┬────────────┘
+                            │
+┌──────────┬──────────┬─────┴────┬──────────┬──────────┬─────────┐
+│ Offensive│ Malware  │ Network  │  OSINT   │ Defense  │Tracking │
+│ Engine   │ Engine   │   IDS    │ Engine   │  WAF     │ Engine  │
+│ Nmap     │ YARA     │ Scapy    │SpiderFoot│Open-AppSc│Flights  │
+│ SQLMap   │ pefile   │Suricata  │ Shodan   │ Auto-IP  │ Ships   │
+│ Hydra    │capstone  │ LSTM     │theHarves │  Block   │Satellite│
+│ ZAP      │ XGen-Q   │  ML IDS  │ CyNER    │          │Cyber Map│
+│ MSF      │          │          │          │          │         │
+└──────────┴──────────┴──────────┴──────────┴──────────┴─────────┘
+                            │
+        ┌───────────────────┼───────────────────┐
+        │                   │                   │
+  ┌─────▼──────┐    ┌───────▼──────┐    ┌──────▼──────┐
+  │Threat Intel│    │  SOC / SIEM  │    │ Bug Bounty  │
+  │MISP+OpenCTI│    │Wazuh + ELK   │    │  Platform   │
+  │   Neo4j    │    │  Real-time   │    │ CVSS Scorer │
+  └────────────┘    └──────────────┘    └─────────────┘
+                            │
+         PostgreSQL · Elasticsearch · Neo4j · SQLite
 ```
 
 ---
 
-## ✅ All Features Explained
+## ✅ All Features
 
 ### 🔴 1. Offensive Security Engine
 
-Runs real penetration testing tools automatically. You give a target IP or URL — it scans, finds vulnerabilities, and the AI explains each one and suggests how to fix it.
+Run real penetration tests against any IP or web app. The AI guides each step, explains every finding, and auto-generates a fix report.
 
-| Feature | Tool Used | What It Does |
-|---------|-----------|--------------|
-| Port & Service Scan | **Nmap** | Scans all ports, detects running services and versions |
-| CVE Detection | Nmap + vulners script | Matches services to known CVEs (e.g. CVE-2024-xxxx) |
-| SQL Injection Test | **SQLMap** | Auto-tests web URLs for SQL injection vulnerabilities |
-| Web App Vulnerability Scan | **OWASP ZAP** | Full DAST scan — XSS, CSRF, injections, misconfigs |
-| Brute Force Test | **Hydra** | Tests login forms for weak/default passwords |
-| Auto Exploitation | **DeepExploit + Metasploit** | AI selects best exploit for detected vulnerabilities |
-| Pentest Workflow | PentestGPT logic | Structures full pentest: recon → scan → exploit → report |
-| AI Fix Suggestions | Mixtral LLM | Explains each finding and gives a patch/fix recommendation |
-
-> **Requires:** Nmap, SQLMap, Hydra, Metasploit installed. Use **Tool Installer tab** in GUI.
-
----
-
-### 🦠 2. Malware Engine
-
-Upload any file (`.exe`, `.dll`, `.bin`, `.apk`, script) — the engine analyzes it without running it.
-
-| Feature | Tool Used | What It Does |
-|---------|-----------|--------------|
-| Signature Detection | **YARA** | Matches file against 1000s of known malware signatures |
-| Binary Parsing | **pefile** | Extracts PE headers, imports, sections, metadata from EXE/DLL |
-| Disassembly | **capstone** | Disassembles binary to readable assembly code |
-| Behavior Analysis | **XGen-Q reasoning** | Identifies suspicious code patterns and behaviors |
-| Risk Scoring | Custom scorer | 0–100 risk score based on all findings |
-| AI Explanation | Mixtral LLM | Explains what the malware does in plain English |
+| Feature | Tool | What It Does |
+|---------|------|--------------|
+| Port & Service Scan | **Nmap** `-sV -sC` | Scans all 65535 ports, detects service versions |
+| CVE Detection | Nmap + vulners.nse | Auto-matches services to known CVE database |
+| SQL Injection | **SQLMap** | Tests every parameter for SQL injection |
+| Full Web App Scan | **OWASP ZAP** API | DAST scan — XSS, CSRF, injections, misconfigs |
+| Brute Force | **Hydra** | Tests SSH, FTP, HTTP login with wordlists |
+| Auto Exploitation | **Metasploit + DeepExploit** | AI picks best exploit for detected vulns |
+| Pentest Workflow | PentestGPT logic + LLM | Recon → scan → exploit → report, AI-guided |
+| Fix Suggestions | Mixtral LLM | Patch recommendation for every finding |
 
 **Flow:**
 ```
-File → YARA signature match → pefile metadata → XGen-Q behavior → LLM explain + risk score
+Target IP/URL → Nmap scan → CVE match → SQLMap test → ZAP DAST
+      → DeepExploit → LLM explains all → Risk report
 ```
 
 ---
 
-### 🌐 3. Network IDS Engine
+### 🦠 2. Malware Analysis Engine
 
-Monitors your network live and detects attacks in real time.
+Upload any file — analyze it without executing it. Finds trojans, ransomware, spyware, backdoors.
 
-| Feature | Tool Used | What It Does |
-|---------|-----------|--------------|
-| Live Packet Capture | **Scapy** | Captures all network packets on your interface |
-| IDS/IPS Rules | **Suricata** | Detects DDoS, port scans, exploits using Snort-compatible rules |
-| Traffic Logging | **Zeek** | Creates structured logs of all network connections |
-| Anomaly Detection | **LSTM Autoencoder** | Deep learning model detects unusual traffic patterns |
-| Phishing Detection | **DQN model** | RL model classifies phishing vs legitimate URLs |
-| AI Explanation | Mixtral LLM | Identifies attack type and recommends blocking action |
+| Feature | Tool | What It Does |
+|---------|------|--------------|
+| Signature Scan | **YARA** (1000+ rules) | Matches against known malware families |
+| Binary Parsing | **pefile** | PE headers, imports, exports, sections, entropy |
+| Disassembly | **capstone** | Readable assembly code from binary |
+| String Extraction | Custom extractor | Finds URLs, IPs, registry keys, passwords in binary |
+| Behavior Analysis | **XGen-Q** model | Identifies ransomware, keylogger, botnet patterns |
+| ASLR / DEP check | pefile flags | Checks if binary has exploit mitigations |
+| Risk Score | Weighted scorer | 0–100 score: CLEAN / LOW / MEDIUM / HIGH / CRITICAL |
+| AI Explanation | Mixtral LLM | "This file is a keylogger that exfiltrates to 1.2.3.4" |
 
-**Flow:**
-```
-Network → Scapy capture → Suricata alerts → LSTM anomaly detect → LLM explain attack
-```
+**Supported:** `.exe` `.dll` `.bin` `.so` `.apk` `.py` `.js` `.php` `.docx` `.pdf`
 
-> **Requires:** Suricata installed, Wireshark/tshark for packet capture. Run as Admin/sudo.
+---
+
+### 🌐 3. Network IDS & Live Attack Map
+
+Monitors your network in real time. Detects attacks as they happen. Shows them on a live world map.
+
+| Feature | Tool | What It Does |
+|---------|------|--------------|
+| Packet Capture | **Scapy** | Sniffs all packets on selected network interface |
+| IDS Rules Engine | **Suricata** | 40,000+ rules — detects DDoS, exploits, scans |
+| Traffic Logging | **Zeek** | Structured logs of every connection |
+| Anomaly Detection | **LSTM Autoencoder** | Deep learning finds traffic patterns that don't fit normal |
+| Phishing Detection | **DQN RL model** | Classifies phishing URLs in real time |
+| Live Attack Map | Custom canvas widget | Animated world map — shows attack source → target arrows |
+| Auto Block | Defense Engine | Blocks attacker IP via firewall rule instantly |
+| AI Explanation | Mixtral LLM | Names attack type and recommends response |
+
+> ⚠️ Requires admin/root privileges for packet capture.
 
 ---
 
 ### 🕵️ 4. OSINT Investigation Engine
 
-Give it an IP address, domain name, email, or username — it builds a full digital profile.
+Enter any IP, domain, email, phone, or username — get a complete intelligence profile.
 
-| Feature | Tool Used | What It Does |
-|---------|-----------|--------------|
-| IP/Domain Recon | **SpiderFoot** | Automated OSINT collection from 200+ sources |
-| Email Harvesting | **theHarvester** | Finds emails, subdomains, IPs linked to a domain |
-| Exposed Services | **Shodan API** | Shows open ports, services, vulns indexed by Shodan |
-| Entity Extraction | **CyNER** | AI extracts IPs, CVEs, domains, hashes from raw text |
-| Threat Correlation | Mixtral LLM | Links findings to known threat actors and patterns |
-
-**Flow:**
-```
-IP / Email / Domain → OSINT tools collect → CyNER extracts entities → LLM correlates threats
-```
-
-> **Requires:** Shodan API key (free tier available).
+| Feature | Tool | What It Does |
+|---------|------|--------------|
+| Automated Recon | **SpiderFoot** | 200+ OSINT sources queried automatically |
+| Email & Subdomain Hunt | **theHarvester** | Finds emails, subdomains, employees linked to target |
+| Exposed Services | **Shodan API** | Finds open ports, vulns, banners indexed globally |
+| AI Entity Extraction | **CyNER** (NER model) | Pulls IPs, CVEs, domain names, hashes from any text |
+| WHOIS / DNS History | SecurityTrails API | Full DNS records, historical WHOIS, subdomain list |
+| Breach Check | HaveIBeenPwned API | Checks if email/password appeared in known data breaches |
+| Threat Correlation | Mixtral LLM | Links all OSINT findings to threat actors, campaigns |
 
 ---
 
-### 🛡️ 5. Defense Engine (WAF + AppSec)
+### 🛡️ 5. Defense Engine & WAF
 
-Actively protects your web application from attacks in real time.
+Protects your servers from attacks in real time with a machine learning firewall.
 
-| Feature | Tool Used | What It Does |
-|---------|-----------|--------------|
-| ML-based WAF | **Open-AppSec** | Machine learning firewall — blocks web attacks |
-| Auto-learning | Open-AppSec | Learns normal traffic, auto-blocks anomalies |
-| Attack Detection | Pattern + ML | Detects SQLi, XSS, RCE, path traversal, etc. |
-| IP Blocking | Defense Engine | Automatically blocks attacker IPs |
-| Threat Storage | PostgreSQL | Saves all attacks to database for analysis |
-
-**Flow:**
-```
-Incoming Request → Open-AppSec ML → Attack detected → Block / Allow → Store in threat DB
-```
+| Feature | Tool | What It Does |
+|---------|------|--------------|
+| ML Web Firewall | **Open-AppSec** | Blocks SQLi, XSS, RCE, path traversal, SSRF |
+| Auto-Learning Mode | Open-AppSec | Learns what's normal traffic, auto-blocks anomalies |
+| IP Reputation Block | AbuseIPDB + custom | Blocks known bad IPs before they connect |
+| Rate Limiting | Defense Engine | Stops brute force and DDoS at application layer |
+| Geo-Blocking | GeoIP engine | Block traffic from specific countries |
+| Threat DB | PostgreSQL | Every blocked attack saved with full context |
+| Alert on Block | Telegram/Email | Instantly notified when attack blocked |
 
 ---
 
 ### 🧠 6. Threat Intelligence Engine
 
-Links all findings across all modules to known global threat data.
+Cross-references all findings across every module against global threat databases.
 
-| Feature | Tool Used | What It Does |
-|---------|-----------|--------------|
-| IOC Database | **MISP** | Open-source threat intelligence sharing platform |
-| Graph Intelligence | **OpenCTI** | Visualizes threat actor → attack → IOC relationships |
-| IP/Hash/Domain Lookup | MISP API | Checks if an IP/hash/domain is a known threat |
-| Relationship Mapping | **Neo4j** | Graph database of attack chains and threat actors |
-| Cross-module correlation | All engines | If Network finds IP, OSINT checks it, MISP confirms threat |
-
-**Flow:**
-```
-All modules → Store IOC in MISP → Build graph in OpenCTI → Cross-check new threats
-```
-
-> **Requires:** MISP self-hosted or MISP cloud. OpenCTI self-hosted (Docker).
+| Feature | Tool | What It Does |
+|---------|------|--------------|
+| IOC Management | **MISP** | Open threat intel platform — stores IPs, hashes, domains |
+| Attack Graph | **OpenCTI** | Visualizes threat actor → TTP → IOC relationships |
+| IOC Lookup | MISP API | Instantly checks if any finding is a known threat |
+| Graph DB | **Neo4j** | Stores attack chains and actor relationships as graph |
+| Cross-module | All engines | Network finds IP → OSINT checks it → MISP confirms threat |
+| OTX Feeds | AlienVault OTX | Live threat intel pulses from 100,000+ security researchers |
 
 ---
 
 ### 📊 7. SOC / SIEM Layer
 
-Security Operations Center capabilities — monitors logs, detects breaches, auto-responds.
+Full Security Operations Center in your desktop. Monitor, detect, and respond to breaches.
 
-| Feature | Tool Used | What It Does |
-|---------|-----------|--------------|
-| Log Collection & Alerts | **Wazuh** | SIEM agent collects system/app/security logs |
-| Log Indexing & Search | **Elasticsearch** | Full-text search through millions of log lines |
-| Anomaly Detection | LSTM + ML | Detects unusual login patterns, file changes |
-| Real-time Alerts | FastAPI WebSocket | Pushes alerts to GUI/Telegram/email instantly |
-| Auto IP Blocking | SOC Engine | Blocks attacking IPs automatically on HIGH/CRITICAL |
-| Failed Login Detection | Wazuh rules | Detects brute force / credential stuffing |
-
-> **Requires:** Wazuh manager running (self-hosted). Elasticsearch optionally via Docker.
+| Feature | Tool | What It Does |
+|---------|------|--------------|
+| Log Collection | **Wazuh** agent | Collects OS logs, app logs, security events |
+| Log Indexing | **Elasticsearch** | Search through millions of log lines in milliseconds |
+| Anomaly Detection | LSTM + scikit-learn | Finds unusual patterns in login/file/network logs |
+| Real-time Alerts | FastAPI WebSocket | Pushes live alerts to GUI panel |
+| Auto IP Block | Wazuh active-response | Blocks attacker IP the moment attack detected |
+| Brute Force Detect | Wazuh rules | Triggers on 5+ failed logins in 30 seconds |
+| Dashboard | GUI panel | Live event feed, severity counters, sparkline charts |
 
 ---
 
-### 🐞 8. Bug Bounty Platform
+### 🏆 8. Bug Bounty Platform
 
-A complete platform to submit, validate, score, and reward vulnerability reports.
+A complete vulnerability disclosure and reward platform built in.
 
 | Feature | What It Does |
-|---------|-------------|
-| Bug Submission Form | Researchers submit bugs via GUI or REST API |
-| AI Auto-Validation | LLM checks if the report describes a real vulnerability |
-| CVSS v3.1 Auto-Scoring | Automatically calculates severity score |
-| Duplicate Detection | SHA256 hash prevents same bug submitted twice |
-| Screenshot / PoC Upload | Attach proof-of-concept files |
-| Auto Severity Classification | Critical / High / Medium / Low / Informational |
-| Admin Approve/Reject Panel | Admin reviews and approves/rejects each report |
-| Reward Tracking & Leaderboard | Track bounties paid and top researchers |
-
-**Flow:**
-```
-Submit bug → AI validates → CVSS scored → Duplicate check → Admin approves → Reward issued
-```
+|---------|--------------|
+| Bug Submission | Researchers submit via GUI form or REST API (`POST /bounty/submit`) |
+| AI Validation | LLM reads report and confirms it's a real, exploitable vulnerability |
+| CVSS v3.1 Auto-Score | System calculates severity score automatically |
+| Duplicate Detection | SHA256 hash of bug description — rejects identical submissions |
+| PoC Upload | Attach screenshots, video, exploit code |
+| Auto Severity | CRITICAL / HIGH / MEDIUM / LOW / INFORMATIONAL |
+| Admin Panel | Approve, reject, request more info per report |
+| Reward Tracker | Track how much paid, to whom, leaderboard of top researchers |
+| REST API | Full CRUD API at `http://localhost:8001/docs` |
 
 ---
 
-### 🐛 9. App Bug Analyzer *(NEW)*
+### 🐛 9. App Bug Analyzer
 
-Drag-and-drop any application — it finds all security bugs and tells you exactly how to fix them.
+Drop any application file or folder — DAVID finds every security bug and tells you exactly how to fix it, with line numbers.
 
-| Target | What It Analyzes |
-|--------|-----------------|
-| **Android APK** | AndroidManifest.xml + Java/Kotlin code — debuggable, allowBackup, world-readable files, SQLi, etc. |
-| **EXE / DLL** | PE headers — ASLR, DEP, stack cookies, strings, YARA scan |
-| **PHP files** | SQLi, RFI, eval, shell_exec, open redirect, weak hashing, session bugs |
-| **Python files** | Hardcoded secrets, debug=True, eval, unsafe pickle, bare except |
-| **JavaScript / TypeScript** | XSS sinks, localStorage tokens, HTTP URLs, eval, loose equality |
-| **Java / Kotlin** | SQL concat, OS exec, SecureRandom, stack trace, debug logging |
-| **URL / Web App** | HTTP headers (CSP, HSTS, X-Frame), error messages in body, cookies, mixed content |
-| **Project Folder** | Recursively scans every file in the project |
-| **ZIP Archive** | Extracts and scans all contents |
+| Input | What Gets Analyzed |
+|-------|--------------------|
+| `.apk` | AndroidManifest.xml, Java/Kotlin code, resource files |
+| `.exe` / `.dll` | PE headers, ASLR/DEP/GS flags, YARA, binary strings |
+| `.php` | SQLi, RFI, eval, shell_exec, open redirect, weak hash, session bugs |
+| `.py` | Hardcoded secrets, debug=True, eval, unsafe pickle, bare except |
+| `.js` / `.ts` | XSS sinks (innerHTML), localStorage tokens, eval, HTTP URLs |
+| `.java` / `.kt` | SQL concat, ProcessBuilder, SecureRandom, debuggable=true |
+| URL | Missing security headers, error messages, cookie flags, mixed content |
+| Folder / ZIP | Recursively scans every file inside |
 
-**Every bug report includes:**
-- ✅ Severity: CRITICAL / HIGH / MEDIUM / LOW / INFO
-- ✅ File + exact line number
-- ✅ The code line that triggered the bug
+**Each bug report gives:**
+- ⚠️ Severity — CRITICAL / HIGH / MEDIUM / LOW / INFO
+- 📁 File name + exact line number
+- 💻 The actual code that triggered the bug
 - ✅ Fix suggestion — exactly what to change
-- ✅ CVSS score estimate (e.g. `9.0–10.0`)
-- ✅ Export as JSON or HTML report
+- 📊 CVSS score estimate (e.g. `9.0–10.0`)
+- 📄 Export to HTML or JSON report
 
-**Run from command line:**
 ```bash
-python engines/bug_analyzer.py myapp.apk
-python engines/bug_analyzer.py mywebsite.php
+# CLI usage
+python engines/bug_analyzer.py app-release.apk
+python engines/bug_analyzer.py https://yoursite.com
 python engines/bug_analyzer.py C:\projects\myapp\
-python engines/bug_analyzer.py https://example.com
 ```
 
 ---
 
-### ✈️ 10. Tracking & Geo Intelligence
+### 🌍 10. Live Cyber Attack Map
 
-| Feature | Data Source | What It Does |
-|---------|-------------|--------------|
-| Flight Tracking | **OpenSky Network API** | Tracks any aircraft by callsign or ICAO24 |
-| Ship Tracking | **AIS / MarineTraffic** | Tracks vessels by MMSI number |
-| Satellite Tracking | **CelesTrak + Skyfield** | Computes real-time satellite position by NORAD ID |
-| IP Geolocation | **ip-api.com** | Maps IP to country, city, ISP, lat/long |
+A real-time animated world map showing global cyber attacks as they happen — like Norse Attack Map, built into DAVID.
+
+| Feature | How It Works |
+|---------|--------------|
+| **Live attack feed** | Pulls from AbuseIPDB, OTX, MISP live feeds |
+| **World map canvas** | Tkinter/PIL world map with country outlines |
+| **Animated arrows** | Red lines fly from attacker country → target country |
+| **Attack labels** | Shows attack type (DDoS, SQLi, Brute Force, Malware) |
+| **Local alerts** | If your IP is targeted — red alert popup |
+| **Attack counter** | Live count of attacks per second / per hour |
+| **Filter by type** | Show only DDoS, or SQLi, or malware, etc. |
+| **Heatmap mode** | Countries colored by attack volume (green → yellow → red) |
 
 ---
 
-### ⚙️ 11. Automation & Alerting
+### ✈️ 11. Live Flight Tracking
+
+Track any aircraft in real time anywhere in the world.
+
+| Feature | Details |
+|---------|---------|
+| **Data source** | OpenSky Network API (free account) |
+| **Map** | Interactive canvas map with aircraft icons |
+| **Search** | By callsign, ICAO24, airline, country, or area |
+| **Live data** | Position, altitude, speed, heading, squawk code |
+| **Flight path** | Shows last 30 minutes of flight path |
+| **Auto-refresh** | Updates every 10 seconds |
+| **Alert mode** | Alert when specific flight enters your area |
+
+```python
+# Example: Track Air India 101
+flight_tracker.track(callsign="AIC101")
+# Returns: lat, lon, altitude, speed, heading, origin, destination
+```
+
+---
+
+### 🚢 12. Live Ship Tracking
+
+Track vessels worldwide using AIS data.
+
+| Feature | Details |
+|---------|---------|
+| **Data source** | MarineTraffic API + public AIS feeds |
+| **Search** | By vessel name, MMSI, IMO number, flag state |
+| **Live data** | Position, speed, heading, destination port, ETA |
+| **Ship types** | Cargo, tanker, passenger, fishing, naval, etc. |
+| **Port arrivals** | Shows ships arriving/departing any port |
+| **World map** | Ships shown as icons on interactive map |
+| **Route history** | Last 24 hours of vessel route |
+
+```python
+# Example: Track by MMSI
+ship_tracker.track(mmsi="235009998")
+# Returns: vessel name, position, speed, destination, ETA
+```
+
+---
+
+### 🛰️ 13. Live Satellite Tracking
+
+Track any satellite or space station in real time.
+
+| Feature | Details |
+|---------|---------|
+| **Data source** | CelesTrak TLE data (free, no key) + N2YO API |
+| **Propagation** | Skyfield library — accurate orbital mechanics |
+| **Search** | By satellite name, NORAD ID, or category |
+| **Categories** | ISS, weather, GPS, spy sats, Starlink, amateur |
+| **Live position** | Lat, lon, altitude, velocity, pass times |
+| **Orbital path** | Shows ground track on world map |
+| **Next pass** | Calculates next pass over your location |
+| **Popular presets** | ISS, Hubble, NOAA-19, GPS Block III, Starlink |
+
+```python
+# Example: Track ISS
+satellite_tracker.track(norad_id=25544)   # ISS
+# Returns: lat=28.3, lon=77.1, altitude=408km, speed=7.66km/s
+```
+
+---
+
+### 📍 14. IP Geolocation
+
+Map any IP address to its physical location and network info.
+
+| Feature | Details |
+|---------|---------|
+| **Data source** | ip-api.com (free, no key required) |
+| **Returns** | Country, city, ISP, ASN, timezone, lat/lon |
+| **Threat check** | Cross-checks with AbuseIPDB + OTX |
+| **Map pin** | Shows IP location on world map |
+| **Bulk lookup** | Upload a list of IPs — geolocate all at once |
+| **Reverse DNS** | Hostname lookup included |
+
+---
+
+### ⚙️ 15. Automation & Alerting
+
+Set it and forget it — DAVID monitors and alerts automatically.
 
 | Feature | What It Does |
-|---------|-------------|
-| Scheduled Scans | Auto-scan targets at set intervals (background thread) |
-| Email Alerts | SMTP alert on HIGH/CRITICAL threat detected |
-| Telegram Bot Alerts | Instant message to your Telegram when attack detected |
-| Auto Patch Suggestions | AI generates fix recommendation for every finding |
-| Auto IP Block | Blocks attacker IP automatically on CRITICAL threat |
+|---------|--------------|
+| **Scheduled Scans** | Run any module on a schedule (every hour, daily, weekly) |
+| **Telegram Alerts** | Instant message on CRITICAL/HIGH threat |
+| **Email Alerts** | SMTP email with full threat report attached |
+| **Auto IP Block** | Blocks attacking IPs automatically — no human needed |
+| **Auto Patch Reports** | Generates fix report for every vulnerability found |
+| **Watchlist Alerts** | Alert when a specific IP/domain appears in any scan |
 
 ---
 
-## 🔑 Required API Keys — Where to Get Them
+## 🔑 Required API Keys
 
-These are ALL the API keys used by DAVID. Put them in your `.env` file.
+All keys go in your `.env` file. Most are **free**.
 
-### 🟢 Free APIs (No Payment Needed)
+### 🟢 100% Free — No Credit Card
 
-| API Key Name | Service | How to Get | `.env` Variable |
-|-------------|---------|-----------|-----------------|
-| Shodan Free | Shodan — shows open ports/services for any IP | Sign up at [shodan.io](https://account.shodan.io/register) → My Account → API Key | `SHODAN_API_KEY` |
-| ip-api | IP Geolocation (city, country, ISP) | **No key needed** — free up to 1000/day | *(none)* |
-| OpenSky Network | Live flight data | Sign up at [opensky-network.org](https://opensky-network.org/index.php?option=com_users&view=registration) | `OPENSKY_USER` + `OPENSKY_PASS` |
-| CelesTrak | Satellite TLE data | **No key needed** — public API | *(none)* |
-| theHarvester | Email/subdomain OSINT | Built-in tool — no key needed | *(none)* |
-| MISP (self-hosted) | Threat intelligence | Deploy via Docker: `docker-compose up` | `MISP_URL` + `MISP_KEY` |
-| OpenCTI (self-hosted) | Threat graph | Deploy via Docker | `OPENCTI_URL` + `OPENCTI_KEY` |
-| Wazuh (self-hosted) | SIEM / log analysis | Deploy free: [wazuh.com/install](https://documentation.wazuh.com/current/installation-guide/) | `WAZUH_URL` + `WAZUH_USER` + `WAZUH_PASS` |
-| OWASP ZAP | Web app scanner | Download free: [zaproxy.org](https://www.zaproxy.org/download/) then start daemon | `ZAP_URL` + `ZAP_API_KEY` |
+| Service | What For | Get It Here | `.env` Key |
+|---------|---------|------------|------------|
+| **Shodan** | Open ports / exposed services | [shodan.io](https://account.shodan.io/register) → My Account | `SHODAN_API_KEY` |
+| **ip-api.com** | IP geolocation | ❌ No key needed | — |
+| **OpenSky Network** | Live flight tracking | [opensky-network.org](https://opensky-network.org) → Register | `OPENSKY_USER` + `OPENSKY_PASS` |
+| **CelesTrak** | Satellite TLE data | ❌ No key needed | — |
+| **theHarvester** | OSINT email/subdomain | Built-in tool | — |
+| **OWASP ZAP** | Web app scanner | [zaproxy.org](https://zaproxy.org/download/) | `ZAP_URL` + `ZAP_API_KEY` |
+| **MISP** | Threat intelligence | Self-host: `docker-compose up` | `MISP_URL` + `MISP_KEY` |
+| **OpenCTI** | Threat graph | Self-host: Docker | `OPENCTI_URL` + `OPENCTI_KEY` |
+| **Wazuh** | SIEM / log analysis | Self-host: [wazuh.com](https://wazuh.com) | `WAZUH_URL` + `WAZUH_USER` + `WAZUH_PASS` |
+| **Telegram Bot** | Attack alerts | [@BotFather](https://t.me/botfather) → /newbot | `TELEGRAM_BOT_TOKEN` + `TELEGRAM_CHAT_ID` |
 
----
+### 🟡 Freemium — Free Tier Available
 
-### 🟡 Freemium APIs (Free Tier Available)
+| Service | Free Limit | Get It Here | `.env` Key |
+|---------|-----------|------------|------------|
+| **VirusTotal** | 500 req/day | [virustotal.com](https://www.virustotal.com/gui/join-us) | `VIRUSTOTAL_API_KEY` |
+| **AbuseIPDB** | 1,000 req/day | [abuseipdb.com](https://www.abuseipdb.com/account/api) | `ABUSEIPDB_API_KEY` |
+| **AlienVault OTX** | Unlimited | [otx.alienvault.com](https://otx.alienvault.com) | `OTX_API_KEY` |
+| **HaveIBeenPwned** | Read API free | [haveibeenpwned.com](https://haveibeenpwned.com/API/Key) | `HIBP_API_KEY` |
+| **SecurityTrails** | 50 queries/month | [securitytrails.com](https://securitytrails.com) | `SECURITYTRAILS_KEY` |
+| **N2YO** | 1,000 req/hour | [n2yo.com](https://www.n2yo.com/login/?action=register) | `N2YO_API_KEY` |
+| **MarineTraffic** | Limited free | [marinetraffic.com](https://www.marinetraffic.com/en/p/api-services) | `MARINETRAFFIC_KEY` |
 
-| API Key Name | Service | Free Tier | How to Get | `.env` Variable |
-|-------------|---------|-----------|-----------|-----------------|
-| Shodan Membership | More scan results | Free = 1 API credit/month | [shodan.io/store](https://shodan.io/store) | `SHODAN_API_KEY` |
-| VirusTotal | File/URL malware scan | 500 requests/day free | [virustotal.com/gui/join-us](https://www.virustotal.com/gui/join-us) → API Key | `VIRUSTOTAL_API_KEY` |
-| AbuseIPDB | Check if IP is malicious | 1000/day free | [abuseipdb.com/account/api](https://www.abuseipdb.com/account/api) | `ABUSEIPDB_API_KEY` |
-| AlienVault OTX | Threat intel / IOCs | Free account | [otx.alienvault.com](https://otx.alienvault.com) → API Keys | `OTX_API_KEY` |
-| SecurityTrails | DNS/WHOIS history | 50 queries/month free | [securitytrails.com](https://securitytrails.com) → Sign up | `SECURITYTRAILS_KEY` |
-| HaveIBeenPwned | Check email breaches | Free read API | [haveibeenpwned.com/API/Key](https://haveibeenpwned.com/API/Key) | `HIBP_API_KEY` |
-| N2YO | Satellite real-time tracking | 1000 req/hour free | [n2yo.com/login/](https://www.n2yo.com/login/?action=register) | `N2YO_API_KEY` |
-| MarineTraffic | Ship tracking | Limited free | [marinetraffic.com/en/p/api-services](https://www.marinetraffic.com/en/p/api-services) | `MARINETRAFFIC_KEY` |
+### 🔴 Optional / Paid
 
----
+| Service | Cost | Why | `.env` Key |
+|---------|------|-----|------------|
+| **Cloudflare** | Free with account | WAF stats if site on CF | `CLOUDFLARE_API_TOKEN` |
+| **Shodan Membership** | $69/month | More historical data | `SHODAN_API_KEY` |
+| **OpenAI GPT-4** | Pay-per-token | Alternative to local LLM | `OPENAI_API_KEY` |
+| **SMTP / Gmail** | Free | Email alerts | `SMTP_USER` + `SMTP_PASS` |
 
-### 🔴 Paid / Optional APIs
-
-| API Key Name | Service | Cost | Why Needed | `.env` Variable |
-|-------------|---------|------|-----------|-----------------|
-| Shodan Enterprise | Deep scan / historical | $69/month | More scan data | `SHODAN_API_KEY` |
-| Cloudflare API | WAF stats, zone analytics | Free with CF account | If your site uses Cloudflare | `CLOUDFLARE_API_TOKEN` |
-| OpenAI API | Alternative LLM (GPT-4) | Pay-per-token | Only if not using local Mixtral | `OPENAI_API_KEY` |
-| Telegram Bot | Alert notifications | **Free** | Create bot via [@BotFather](https://t.me/botfather) | `TELEGRAM_BOT_TOKEN` + `TELEGRAM_CHAT_ID` |
-| SMTP Email | Alert emails | Free (Gmail/SMTP) | For email alerts | `SMTP_USER` + `SMTP_PASS` + `ALERT_EMAIL` |
+> ✅ **The entire system works with ZERO paid APIs.** All core features run on free/self-hosted tools.
 
 ---
 
-## 💰 Free vs Paid API Summary
+## 📋 Complete `.env` Template
 
-| Category | Free Option | What You Miss Without Paying |
-|----------|-------------|------------------------------|
-| Threat Intel | AbuseIPDB + OTX + MISP (self-hosted) | Historical attack data, premium feeds |
-| Port Scanning | Nmap (local) | Nothing — Nmap is 100% free |
-| Web Scanning | OWASP ZAP (local) | Nothing — ZAP is 100% free |
-| Malware Scan | YARA + pefile (local) | Cloud scan speed via VirusTotal |
-| IP Lookup | ip-api.com | Nothing — fully free |
-| LLM / AI | Mixtral GGUF (offline, local) | Nothing — runs on your machine |
-| SIEM | Wazuh (self-hosted, free) | Enterprise support |
-| Shodan | 1 credit/month free | Historical data, more results |
-| Tracking | OpenSky (free) + CelesTrak (free) | Real-time AIS ship tracking |
-
-> ✅ **Core system works 100% with zero paid APIs.** Paid APIs only add more data.
-
----
-
-## 📋 Complete `.env` File Template
+Copy `.env.example` to `.env` and fill in your keys:
 
 ```env
-# ── LLM ─────────────────────────────────────────────
+# ── AI / LLM (runs offline, no API cost) ────────────
 LLM_MODEL_PATH=models/mixtral.gguf
 LLM_MODEL_TYPE=mistral
 
-# ── Security Tools ───────────────────────────────────
+# ── Offensive Tools ──────────────────────────────────
 ZAP_URL=http://localhost:8080
-ZAP_API_KEY=your_zap_api_key_here
+ZAP_API_KEY=your_zap_api_key
 
+# ── SIEM / SOC ───────────────────────────────────────
 WAZUH_URL=https://localhost:55000
 WAZUH_USER=wazuh
 WAZUH_PASS=your_wazuh_password
 
 # ── Threat Intelligence ──────────────────────────────
-SHODAN_API_KEY=your_shodan_key            # shodan.io
-VIRUSTOTAL_API_KEY=your_vt_key            # virustotal.com
-ABUSEIPDB_API_KEY=your_abuseipdb_key      # abuseipdb.com
-OTX_API_KEY=your_otx_key                  # otx.alienvault.com
-SECURITYTRAILS_KEY=your_st_key            # securitytrails.com
-HIBP_API_KEY=your_hibp_key                # haveibeenpwned.com
-
+SHODAN_API_KEY=your_shodan_key
+VIRUSTOTAL_API_KEY=your_virustotal_key
+ABUSEIPDB_API_KEY=your_abuseipdb_key
+OTX_API_KEY=your_otx_key
+SECURITYTRAILS_KEY=your_securitytrails_key
+HIBP_API_KEY=your_hibp_key
 MISP_URL=https://your-misp-instance
 MISP_KEY=your_misp_auth_key
-
 OPENCTI_URL=http://localhost:8080
 OPENCTI_KEY=your_opencti_key
 
-# ── Tracking ─────────────────────────────────────────
-OPENSKY_USER=your_opensky_username        # opensky-network.org
+# ── Live Tracking ────────────────────────────────────
+OPENSKY_USER=your_opensky_username
 OPENSKY_PASS=your_opensky_password
-N2YO_API_KEY=your_n2yo_key               # n2yo.com
-MARINETRAFFIC_KEY=your_mt_key            # marinetraffic.com
-
-# ── Cloudflare (optional) ────────────────────────────
-CLOUDFLARE_API_TOKEN=your_cf_token        # cloudflare.com → My Profile → API Tokens
+N2YO_API_KEY=your_n2yo_key
+MARINETRAFFIC_KEY=your_marinetraffic_key
 
 # ── Alerts ───────────────────────────────────────────
-TELEGRAM_BOT_TOKEN=your_bot_token         # t.me/botfather
-TELEGRAM_CHAT_ID=your_chat_id
-SMTP_USER=your@gmail.com
+TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+TELEGRAM_CHAT_ID=your_telegram_chat_id
+SMTP_USER=you@gmail.com
 SMTP_PASS=your_app_password
-ALERT_EMAIL=alert@yourdomain.com
+ALERT_EMAIL=alerts@yourdomain.com
 
-# ── Database ─────────────────────────────────────────
+# ── Optional ─────────────────────────────────────────
+CLOUDFLARE_API_TOKEN=your_cloudflare_token
+OPENAI_API_KEY=your_openai_key
+
+# ── Databases ────────────────────────────────────────
 POSTGRES_URL=postgresql://user:pass@localhost/david_db
 ELASTICSEARCH_URL=http://localhost:9200
 NEO4J_URL=bolt://localhost:7687
@@ -404,111 +507,184 @@ NEO4J_PASS=your_neo4j_password
 
 ## 🗄️ Data Layer
 
-| Storage | Purpose |
-|---------|---------|
-| **PostgreSQL** | Structured threat data, bug reports, users, rewards |
-| **Elasticsearch** | Log indexing, SIEM search, full-text log queries |
-| **Neo4j** | Threat relationship graphs, attack chains, IOC links |
-| **SQLite** | Local cache, quick bug bounty DB |
-| **JSON** | Fast module output cache |
+| Database | Purpose |
+|----------|---------|
+| **PostgreSQL** | Threat data, bug reports, users, reward tracking |
+| **Elasticsearch** | Log indexing, SIEM search, full-text queries |
+| **Neo4j** | Threat graphs, attack chains, IOC relationships |
+| **SQLite** | Local cache, offline bug bounty DB |
+| **JSON files** | Fast module output cache, config store |
 
 ---
 
-## 🔄 Full Execution Flow
+## 🧠 Unified Threat Scoring
 
 ```
-User Input (IP / File / URL / Log / Text)
-        ↓
-LLM Brain (understands intent)
-        ↓
-Task Router (selects right engine)
-        ↓
-Engine runs tool + AI model
-        ↓
-Threat Intel cross-check (MISP / OTX / AbuseIPDB)
-        ↓
-LLM merges all results
-        ↓
-Final Output:
-  ✅ Threat Score (0–100)
-  ✅ Attack type + explanation
-  ✅ Fix / patch suggestion
-  ✅ IOC stored to DB
-  ✅ Alert sent (Telegram / email)
+Threat Score  =  Malware Score
+              +  Network Score
+              +  OSINT Score
+              +  Threat Intel Match
+              +  Active Exploit Score
+
+  0 – 24   →  LOW       (green)   Safe
+ 25 – 49   →  MEDIUM    (yellow)  Monitor
+ 50 – 74   →  HIGH      (orange)  Investigate
+ 75 – 100  →  CRITICAL  (red)     Respond Now
 ```
 
 ---
 
 ## 🚀 Quick Start
 
-See **[SETUP.md](SETUP.md)** for full installation.
-
 ```bash
-# Clone
+# 1. Clone the repository
 git clone https://github.com/david0154/david-cyber-intelligence-system
 cd david-cyber-intelligence-system
 
-# Install Python dependencies
+# 2. Install dependencies
 pip install -r requirements.txt
 
-# Copy and fill your API keys
+# 3. Set up config
 cp .env.example .env
+# Edit .env and add your API keys
 
-# ── Launch Options ──────────────────────────────────
-# GUI Desktop App (recommended for non-tech users)
+# 4. Launch GUI (recommended)
+python launcher.py
+
+# OR: Launch directly
 python gui_app.py
 
-# CLI
+# OR: CLI mode
 python main.py
 
-# REST API
+# OR: REST API
 uvicorn core.api:app --reload --port 8000
 
-# Bug Bounty API
+# OR: Bug Bounty API
 uvicorn bounty.api:app --reload --port 8001
-
-# Bug Analyzer CLI
-python engines/bug_analyzer.py /path/to/app.apk
-python engines/bug_analyzer.py https://yoursite.com
 ```
 
-**First-time setup (GUI):**
-1. Open app → click **📦 Tool Installer** tab
-2. Click **▶ INSTALL ALL** → all tools auto-install
-3. Click **⚙️ Settings** → fill in API keys → click **Save**
-4. Go to **🔧 Modules** → select any module → click **▶ RUN**
+---
+
+## 💿 Install as Normal Software
+
+### 🪟 Windows (one-click install)
+
+```bat
+:: Right-click → Run as Administrator
+install.bat
+```
+
+Creates Desktop shortcut + Start Menu entry. Double-click **DAVID CIS** to open.
+
+### 🐧 Linux
+
+```bash
+bash install.sh
+# Creates desktop icon in app menu and ~/Desktop
+```
+
+### 🍎 macOS
+
+```bash
+bash install.sh
+# Creates DAVID CIS.command on Desktop — double-click to open
+```
+
+### 📦 Build Standalone Installer
+
+```bash
+# Builds .exe installer (Windows), .dmg (macOS), .deb + AppImage (Linux)
+python build_exe.py
+```
+
+Outputs:
+- `dist/DAVID-CIS-1.0.0-Setup.exe` — Windows installer
+- `dist/DAVID-CIS-1.0.0.dmg` — macOS disk image
+- `dist/david-cis_1.0.0_amd64.deb` — Debian/Ubuntu package
+- `dist/DAVID-CIS-1.0.0-x86_64.AppImage` — Universal Linux
 
 ---
 
 ## 🤖 AI Natural Language Commands
 
-```bash
-"Scan my server 192.168.1.1"        → Nmap + CVE scan + AI report
-"Test web app https://mysite.com"   → ZAP + SQLMap + AI fixes
-"Analyze this file malware.exe"     → YARA + pefile + risk score
-"Analyze my APK app.apk"            → Bug Analyzer → full security report
-"Show live attacks"                 → Wazuh SIEM alerts
-"Check IP 1.2.3.4"                  → OSINT + MISP + Shodan
-"Fix vulnerability CVE-2024-1234"   → AI patch suggestion
-"What ships are near Mumbai?"       → AIS ship tracking
-"Is this email breached?"           → HIBP check
-"Scan my PHP project for bugs"      → Bug Analyzer → finds SQLi, XSS, RFI
+Type these in the AI chat panel:
+
+```
+"Scan server 192.168.1.1"            → Full Nmap + CVE scan + AI report
+"Test https://mysite.com for SQLi"   → SQLMap + OWASP ZAP scan
+"Analyze malware.exe"                → YARA + pefile + behavior analysis
+"Analyze app-release.apk"            → APK security audit
+"Show live cyber attacks"            → Opens live attack world map
+"Track flight AIC101"                → Live flight tracker
+"Track ship MMSI 235009998"          → Live ship tracker
+"Track ISS satellite"                → Live satellite tracker
+"Check IP 1.2.3.4"                   → OSINT + Shodan + MISP lookup
+"Is admin@domain.com breached?"      → HIBP breach check
+"Scan PHP project for bugs"          → Bug Analyzer → finds all vulns
+"Show live attack alerts"            → SOC / Wazuh SIEM panel
+"Block IP 5.6.7.8"                   → Adds to firewall block list
+"Generate pentest report"            → Full AI-written report
+```
+
+---
+
+## 🔄 Full Execution Flow
+
+```
+User Input  (IP / File / URL / Log / Text / Voice command)
+      ↓
+LLM Brain   (Mixtral GGUF — understands intent offline)
+      ↓
+Task Router (selects correct engine + tool)
+      ↓
+Engine runs (tool + AI model in background thread)
+      ↓
+Threat Intel (MISP / OTX / AbuseIPDB cross-check)
+      ↓
+LLM merges  (combines all results into one answer)
+      ↓
+Output:
+  ✅ Threat Score 0–100
+  ✅ Attack type + plain English explanation
+  ✅ Fix / patch recommendation
+  ✅ IOC saved to database
+  ✅ Alert sent to Telegram / Email
+  ✅ PDF/HTML report generated
 ```
 
 ---
 
 ## ⚠️ Legal Disclaimer
 
-> This system is for **authorized security testing only**.  
-> Always obtain **written permission** before scanning any system.  
-> Unauthorized use is illegal. The developer is not responsible for misuse.
+> **DAVID CIS is for authorized security testing ONLY.**
+>
+> You must have **written permission** from the system owner before running any scans.
+> Unauthorized scanning is illegal under the Computer Fraud and Abuse Act (CFAA),
+> IT Act 2000 (India), and equivalent laws worldwide.
+>
+> The developers (Devil Pvt Ltd / Nexuzy Tech Pvt Ltd) are **not responsible** for
+> any misuse of this software.
 
 ---
 
 ## 👨‍💻 Developer
 
-**David**  
-Full-Stack Security Engineer  
-Nexuzy Tech Pvt Ltd | Devil Pvt Ltd  
-Kolkata, West Bengal, India  
-https://hypechats.com
+**David**
+Full-Stack Security Engineer
+Nexuzy Tech Pvt Ltd | Devil Pvt Ltd
+Kolkata, West Bengal, India
+
+🌐 [hypechats.com](https://hypechats.com)
+📧 david@nexuzytech.com
+🐙 [github.com/david0154](https://github.com/david0154)
+
+---
+
+<div align="center">
+
+**DAVID CYBER INTELLIGENCE SYSTEM v1.0**
+*Built with ❤️ in Kolkata, India*
+*Devil Pvt Ltd & Nexuzy Tech Pvt Ltd*
+
+</div>
